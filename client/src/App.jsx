@@ -53,12 +53,15 @@ const AddRemoveLayout = ({ className = "layout", cols = { lg: 12, md: 10, sm: 6,
   );
 
   const [layouts, setLayouts] = useState(JSON.parse(JSON.stringify(originalLayout)))
-
-  const [newCounter, setNewCounter] = useState(0);
   const [breakpoint, setBreakpoint] = useState(null);
 
   const createElement = (el) => {
-    const signalConfig = {
+    const signalConfig = el.name == "Distance to Drone" ? {"label": " Meters",
+    "start": -90,
+    "end": 90,
+    "major_divisions": 25,
+    "minor_divisions": 10,
+    "marks": [{"color": "red", "start": 50, "end": 500}]} : {
       "label": "°",
       "start": -90,
       "end": 90,
@@ -105,7 +108,7 @@ const AddRemoveLayout = ({ className = "layout", cols = { lg: 12, md: 10, sm: 6,
           const usrpData = subscriptionData?.subscriptionData?.data?.usrp
           setUSRPData(prevState => {
             const newCANState = {...prevState.USRP_Values}
-            if (usrpData.ss > 0.1) {
+            if (usrpData.ss > 7 || usrpData.ss == 1) {
               newCANState[usrpData.serial_num] = usrpData
             }
 
